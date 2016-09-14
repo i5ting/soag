@@ -1,6 +1,6 @@
-# Soag
+# Toag
 
-Soag is a sequelize scaffold generator
+Toag is a toshihiko scaffold generator
 
 [![gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
@@ -16,62 +16,42 @@ Soag is a sequelize scaffold generator
 
 ## Install
 
-- moag 1.x for moa2 v1
-
 ```
-[sudo] npm install -g moag@1
+[sudo] npm install -g toag@1
 ```
- 
-- moag 2.x for moa2 v2
-
-```
-[sudo] npm install -g moag@2
-``` 
 
 ## Usage
 
 ### for koa 2 common function
 
 ```
-moag student2 name:string password:string -k
+toag student2 name:string password:string -k
 ```
 
 ### for koa2 async/await
 
 ```
-moag cup name:string password:string -k -a
+toag cup name:string password:string -k -a
 ```
 
 ### for koa2 generator
 
 ```
-moag book name:string password:string -k -g
+toag book name:string password:string -k -g
 ```
 
 ### default for expresss
 
-    ➜  moag git:(master) moag
+    ➜  toag git:(master) toag
     Moajs HELP:
 
-    moag: 【创建脚手架】 moag user name:string password:string uid:object
+    toag: 【创建脚手架】 toag user name:string password:string uid:object
 
     Have a good day! Moaer
     
 ### create scaffold user
 
-    moag user name:string password:object
-    
-    
-mongoose支持的data type基本如下：
-
-- String -> string
-- Number-> number
-- Date -> date
-- Boolean -> boolean
-- Buffer -> buffer
-- ObjectId -> object
-- Mixed  -> mixed
-- Array -> array
+    toag user name:string password:string
 
 ## Contributing
 
@@ -99,7 +79,7 @@ this repo is released under the [MIT
 License](http://www.opensource.org/licenses/MIT).
 
 
-[npm-image]: https://img.shields.io/npm/v/moag.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/moag
+[npm-image]: https://img.shields.io/npm/v/toag.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/toag
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-url]: https://gitter.im/i5ting/moag?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[gitter-url]: https://gitter.im/i5ting/toag?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
