@@ -1,0 +1,73 @@
+{
+  "name": "soag",
+  "version": "1.0.3",
+  "description": "soag is a sequelize scaffold generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm publish .",
+    "test": "node test.js",
+    "express": "node bin/moag.js user name:string password:string uid:object",
+    "a": "node bin/moag.js cup name:string password:string -k -a",
+    "c": "node bin/moag.js student2 name:string password:string -k",
+    "g": "node bin/moag.js book name:string password:string -k -g"
+  },
+  "preferGlobal": "true",
+  "bin": {
+    "moad": "bin/moad.js",
+    "moag": "bin/moag.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i5ting/moag.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/i5ting/moag/issues"
+  },
+  "homepage": "https://github.com/i5ting/moag#readme",
+  "dependencies": {
+    "bluebird": "^2.9.27",
+    "commander": "^2.8.1",
+    "debug": "~2.2.0",
+    "dirw": "^1.0.2",
+    "inflected": "^1.1.6",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.10.3",
+    "shelljs": "^0.5.0",
+    "tpl_apply": "^1.0.5"
+  },
+  "devDependencies": {
+    "ava": "^0.15.2",
+    "co-exec": "^1.1.0",
+    "co": "^4.6.0",
+    "ioredis": "^1.9.1",
+    "is": "^3.1.0",
+    "jade": "^1.11.0",
+    "jsonwebtoken": "^5.0.4",
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.1.0",
+    "koa-json": "^2.0.2",
+    "koa-log4": "^2.0.1",
+    "koa-logger": "^2.0.0",
+    "koa-router": "^7.0.0",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.0.1",
+    "koa.res.api": "^2.0.0",
+    "kp": "^1.1.0",
+    "log1": "^1.0.7",
+    "mongoose": "4.0.5",
+    "mongoosedao": "^2.0.2",
+    "morgan": "~1.6.1",
+    "mount-controllers": "^1.0.7",
+    "mount-koa-routes": "^2.0.1",
+    "mount-middlewares": "^1.0.5",
+    "mount-models": "^1.0.8",
+    "mount-services": "^1.0.7",
+    "msgpack5": "^3.1.0",
+    "runkoa": "^1.5.2",
+    "gulp": "^3.9.0",
+    "superkoa": "^1.0.0",
+    "supervisor": "^0.7.1"
+  }
+}
