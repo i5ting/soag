@@ -10,7 +10,7 @@ var {{entity}} = $models.{{model}};
 exports.list = (ctx, next) => {
   console.log(ctx.method + ' /{{models}} => list, query: ' + JSON.stringify(ctx.query));
 
-  return {{entity}}.getAllAsync().then(( {{models}})=>{
+  return {{entity}}.findAll().then(( {{models}})=>{
     return ctx.render('{{models}}/index', {
       {{models}} : {{models}}
     })
@@ -34,7 +34,11 @@ exports.show = (ctx, next) => {
     ', params: ' + JSON.stringify(ctx.params));
   var id = ctx.params.id;
 
-  return {{entity}}.getByIdAsync(id).then( {{model}} => {
+  return {{entity}}.findOne({
+    where: {
+      id: id
+    }
+  }).then( {{model}} => {
     console.log({{model}});
     return ctx.render('{{models}}/show', {
       {{model}} : {{model}}
@@ -50,7 +54,11 @@ exports.edit = (ctx, next) => {
 
   var id = ctx.params.id;
 
-  return {{entity}}.getByIdAsync(id).then( {{model}} => {
+  return {{entity}}.findOne({
+    where: {
+      id: id
+    }
+  }).then( {{model}} => {
     console.log({{model}});
     {{model}}._action = 'edit';
 
@@ -66,7 +74,7 @@ exports.create = (ctx, next) => {
   console.log(ctx.method + ' /{{models}} => create, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
 
-  return {{entity}}.createAsync({{keypair}}).then( {{model}} => {
+  return {{entity}}.create({{keypair}}).then( {{model}} => {
     console.log({{model}});
     return ctx.render('{{models}}/show', {
       {{model}} : {{model}}
@@ -82,7 +90,13 @@ exports.update = (ctx, next) => {
 
     var id = ctx.params.id;
 
-    return {{entity}}.updateById(id,{{keypair}}).then( {{model}} => {
+    return {{entity}}.findOne({
+      where: {
+        id: id
+      }
+    }).then( {{model}} => {
+      return {{model}}.update({{keypair}})
+    }).then( {{model}} => {
       console.log({{model}});
 
       return ctx.body = ({
@@ -101,7 +115,11 @@ exports.destroy = (ctx, next) => {
   console.log(ctx.method + ' /{{models}}/:id => destroy, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
   var id = ctx.params.id;
-  return {{entity}}.deleteByIdAsync(id).then( () =>{
+  return {{entity}}.destroy({
+      where: {
+        id: id
+      }
+  }).then( () =>{
     return ctx.body= ({
       data:{},
       status:{
@@ -119,9 +137,9 @@ exports.destroy = (ctx, next) => {
 // -- custom api
 exports.api = {
   list: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}._id;
+    var {{model}}_id = ctx.api_{{model}}.id;
 
-    return {{entity}}.queryAsync({}).then(({{models}}) => {
+    return {{entity}}.findAll().then(({{models}}) => {
       return ctx.api({
         {{models}} : {{models}}
       })
@@ -130,10 +148,14 @@ exports.api = {
     });
   },
   show: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}._id;
+    var {{model}}_id = ctx.api_{{model}}.id;
     var id = ctx.params.{{model}}_id;
 
-    return {{entity}}.getByIdAsync(id).then(({{model}})=>{
+    return {{entity}}.findOne({
+      where: {
+        id: id
+      }
+    }).then(({{model}})=>{
       return ctx.api({
         {{model}} : {{model}}
       });
@@ -142,9 +164,9 @@ exports.api = {
     });
   },
   create: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}._id;
+    var {{model}}_id = ctx.api_{{model}}.id;
 
-    return {{entity}}.createAsync({{keypair}}).then({{model}}=> {
+    return {{entity}}.create({{keypair}}).then({{model}}=> {
       return ctx.body = ({
         {{model}} : {{model}}
       })
@@ -154,9 +176,15 @@ exports.api = {
 
   },
   update: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}._id;
+    var {{model}}_id = ctx.api_{{model}}.id;
     var id = ctx.params.{{model}}_id;
-    return {{entity}}.updateByIdAsync(id, {{keypair}}).then({{model}}=> {
+    return {{entity}}.findOne({
+      where: {
+        id: id
+      }
+    }).then({{model}}=> {
+      return {{model}}.update({{keypair}})
+    }).then({{model}}=> {
       return ctx.api({
         {{model}} : {{model}},
         redirect : '/{{models}}/' + id
@@ -166,10 +194,14 @@ exports.api = {
     });
   },
   delete: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}._id;
+    var {{model}}_id = ctx.api_{{model}}.id;
     var id = ctx.params.{{model}}_id;
 
-    return {{entity}}.deleteByIdAsync(id).then(function(){
+    return {{entity}}.destroy({
+      where: {
+        id: id
+      }
+    }).then(function(){
       return ctx.api({id: id})
     }).catch((err)=>{
       return ctx.api_error(err);
