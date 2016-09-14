@@ -9,7 +9,7 @@ var {{entity}} = $models.{{model}};
 exports.list = async (ctx, next) => {
   console.log(ctx.method + ' /{{models}} => list, query: ' + JSON.stringify(ctx.query));
   try {
-    let {{models}} = await {{entity}}.findAll();
+    let {{models}} = await {{entity}}.find().$promise
   
     await ctx.render('{{models}}/index', {
       {{models}} : {{models}}
@@ -35,11 +35,9 @@ exports.show = async (ctx, next) => {
     
   try {
     let id = ctx.params.id;
-    let {{model}} = await {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    });
+    let {{model}} = await {{entity}}.where({
+      id: id
+    }).findOne().$promise
   
     console.log({{model}});
   
@@ -58,11 +56,9 @@ exports.edit = async (ctx, next) => {
   try {
     let id = ctx.params.id;
 
-    let {{model}} = await {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    });
+    let {{model}} = await {{entity}}.where({
+      id: id
+    }).findOne().$promise
   
     console.log({{model}});
     {{model}}._action = 'edit';
@@ -80,7 +76,7 @@ exports.create = async (ctx, next) => {
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
 
   try {
-    let {{model}} = await {{entity}}.create({{keypair}});
+    let {{model}} = await {{entity}}.build({{keypair}}).insert().$promise
   
     console.log({{model}});
     await ctx.render('{{models}}/show', {
@@ -98,13 +94,11 @@ exports.update = async (ctx, next) => {
   try {
     let id = ctx.params.id;
 
-    let {{model}} = await {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    })
+    let {{model}} = await {{entity}}.where({
+      id: id
+    }).findOne().$promise
     
-    {{model}} = await {{model}}.update({{keypair}})
+    {{model}} = await {{model}}.updateByJson({{keypair}}).$promise
   
     ctx.body = ({
       data:{
@@ -127,11 +121,9 @@ exports.destroy = async (ctx, next) => {
   try {
     let id = ctx.params.id;
   
-    await {{entity}}.destroy({
-        where: {
-          id: id
-        }
-    });
+    await {{entity}}.where({
+      id: id
+    }).delete().$promise
   
     ctx.body = ({
       data:{},
@@ -153,7 +145,7 @@ exports.api = {
     try {
       let api_user_id = ctx.api_user.id;
 
-      let {{models}} = await {{entity}}.findAll();
+      let {{models}} = await {{entity}}.find().$promise
     
       await ctx.api({
         {{models}} : {{models}}
@@ -167,11 +159,9 @@ exports.api = {
       let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
 
-      let {{model}} = await {{entity}}.findOne({
-        where: {
-          id: id
-        }
-      });
+      let {{model}} = await {{entity}}.where({
+        id: id
+      }).findOne().$promise
     
       await ctx.api({
         {{model}} : {{model}}
@@ -184,7 +174,7 @@ exports.api = {
     try {
       let api_user_id = ctx.api_user.id;
 
-      let {{model}} = await {{entity}}.create({{keypair}});
+      let {{model}} = await {{entity}}.build({{keypair}}).insert().$promise
     
       ctx.body = ({
         {{model}} : {{model}}
@@ -198,13 +188,11 @@ exports.api = {
       let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
     
-      let {{model}} = await {{entity}}.findOne({
-        where: {
-          id: id
-        }
-      })
+      let {{model}} = await {{entity}}.where({
+        id: id
+      }).findOne().$promise
       
-      {{model}} = await {{model}}.update({{keypair}})
+      {{model}} = await {{model}}.updateByJson({{keypair}}).$promise
     
       await ctx.api({
         {{model}} : {{model}},
@@ -219,11 +207,9 @@ exports.api = {
       let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
 
-      await {{entity}}.destroy({
-        where: {
-          id: id
-        }
-      })
+      await {{entity}}.where({
+        id: id
+      }).delete().$promise
     
       await ctx.api({id: id});
     } catch (err) {
