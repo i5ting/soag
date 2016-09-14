@@ -1,6 +1,6 @@
 {
   "name": "toag",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "soag is a sequelize scaffold generator",
   "main": "index.js",
   "scripts": {
