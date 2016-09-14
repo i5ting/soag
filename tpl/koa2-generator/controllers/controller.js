@@ -9,7 +9,7 @@ var {{entity}} = $models.{{model}};
 exports.list = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}} => list, query: ' + JSON.stringify(ctx.query));
   
-  let {{models}} = yield {{entity}}.getAllAsync();
+  let {{models}} = yield {{entity}}.findAll();
   
   yield ctx.render('{{models}}/index', {
     {{models}} : {{models}}
@@ -30,7 +30,11 @@ exports.show = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}}/:id => show, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params));
   let id = ctx.params.id;
-  let {{model}} = yield {{entity}}.getByIdAsync(id);
+  let {{model}} = yield {{entity}}.findOne({
+    where: {
+      id: id
+    }
+  })
   
   console.log({{model}});
   
@@ -45,7 +49,11 @@ exports.edit = function *(ctx, next) {
 
   let id = ctx.params.id;
 
-  let {{model}} = yield {{entity}}.getByIdAsync(id);
+  let {{model}} = yield {{entity}}.findOne({
+    where: {
+      id: id
+    }
+  })
   
   console.log({{model}});
   {{model}}._action = 'edit';
@@ -59,7 +67,7 @@ exports.create = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}} => create, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
 
-  let {{model}} = yield {{entity}}.createAsync({{keypair}});
+  let {{model}} = yield {{entity}}.create({{keypair}});
   
   console.log({{model}});
   yield ctx.render('{{models}}/show', {
@@ -73,7 +81,13 @@ exports.update = function *(ctx, next) {
 
   let id = ctx.params.id;
 
-  let {{model}} = yield {{entity}}.updateByIdAsync(id,{{keypair}});
+  let {{model}} = yield {{entity}}.findOne({
+    where: {
+      id: id
+    }
+  })
+  
+  {{model}} = yield {{model}}.update({{keypair}})
   
   yield ctx.body = ({
     data:{
@@ -91,7 +105,11 @@ exports.destroy = function *(ctx, next) {
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
   let id = ctx.params.id;
   
-  yield {{entity}}.deleteByIdAsync(id);
+  yield {{entity}}.destroy({
+      where: {
+        id: id
+      }
+  });
   
   yield ctx.body= ({
     data:{},
@@ -107,38 +125,48 @@ exports.destroy = function *(ctx, next) {
 // -- custom api
 exports.api = {
   list: function *(ctx, next) {
-    let {{model}}_id = ctx.api_{{model}}._id;
+    let api_user_id = ctx.api_user.id;
 
-    let {{models}} = yield {{entity}}.queryAsync({});
+    let {{models}} = yield {{entity}}.findAll();
     
     yield ctx.api({
       {{models}} : {{models}}
     })
   },
   show: function *(ctx, next) {
-    let {{model}}_id = ctx.api_{{model}}._id;
+    let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
 
-    let {{model}} = yield {{entity}}.getByIdAsync(id);
+    let {{model}} = yield {{entity}}.findOne({
+      where: {
+        id: id
+      }
+    });
     
     yield ctx.api({
       {{model}} : {{model}}
     });
   },
   create: function *(ctx, next) {
-    let {{model}}_id = ctx.api_{{model}}._id;
+    let api_user_id = ctx.api_user.id;
 
-    let {{model}} = yield {{entity}}.createAsync({{keypair}});
+    let {{model}} = yield {{entity}}.create({{keypair}});
     
     yield ctx.body = ({
       {{model}} : {{model}}
     });
   },
   update: function *(ctx, next) {
-    let {{model}}_id = ctx.api_{{model}}._id;
+    let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
     
-    let {{model}} = yield {{entity}}.updateByIdAsync(id, {{keypair}});
+    let {{model}} = yield {{entity}}.findOne({
+      where: {
+        id: id
+      }
+    });
+    
+    {{model}} = yield {{model}}.update({{keypair}})
     
     yield ctx.api({
       {{model}} : {{model}},
@@ -146,10 +174,14 @@ exports.api = {
     });
   },
   delete: function *(ctx, next) {
-    let {{model}}_id = ctx.api_{{model}}._id;
+    let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
 
-    yield {{entity}}.deleteByIdAsync(id);
+    yield {{entity}}.destroy({
+      where: {
+        id: id
+      }
+    })
     
     yield ctx.api({id: id});
   }

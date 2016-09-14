@@ -137,7 +137,7 @@ exports.destroy = (ctx, next) => {
 // -- custom api
 exports.api = {
   list: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}.id;
+    let api_user_id = ctx.api_user.id;
 
     return {{entity}}.findAll().then(({{models}}) => {
       return ctx.api({
@@ -148,7 +148,7 @@ exports.api = {
     });
   },
   show: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}.id;
+    let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
 
     return {{entity}}.findOne({
@@ -164,7 +164,7 @@ exports.api = {
     });
   },
   create: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}.id;
+    let api_user_id = ctx.api_user.id;
 
     return {{entity}}.create({{keypair}}).then({{model}}=> {
       return ctx.body = ({
@@ -176,7 +176,7 @@ exports.api = {
 
   },
   update: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}.id;
+    let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
     return {{entity}}.findOne({
       where: {
@@ -194,7 +194,7 @@ exports.api = {
     });
   },
   delete: (ctx, next) => {
-    var {{model}}_id = ctx.api_{{model}}.id;
+    let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
 
     return {{entity}}.destroy({

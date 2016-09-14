@@ -151,7 +151,7 @@ exports.destroy = async (ctx, next) => {
 exports.api = {
   list: async (ctx, next) => {
     try {
-      let {{model}}_id = ctx.api_{{model}}._id;
+      let api_user_id = ctx.api_user.id;
 
       let {{models}} = await {{entity}}.findAll();
     
@@ -164,7 +164,7 @@ exports.api = {
   },
   show: async (ctx, next) => {
     try {
-      let {{model}}_id = ctx.api_{{model}}._id;
+      let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
 
       let {{model}} = await {{entity}}.findOne({
@@ -182,7 +182,7 @@ exports.api = {
   },
   create: async (ctx, next) => {
     try {
-      let {{model}}_id = ctx.api_{{model}}._id;
+      let api_user_id = ctx.api_user.id;
 
       let {{model}} = await {{entity}}.create({{keypair}});
     
@@ -195,7 +195,7 @@ exports.api = {
   },
   update: async (ctx, next) => {
     try {
-      let {{model}}_id = ctx.api_{{model}}._id;
+      let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
     
       let {{model}} = await {{entity}}.findOne({
@@ -216,7 +216,7 @@ exports.api = {
   },
   delete: async (ctx, next) => {
     try {
-      let {{model}}_id = ctx.api_{{model}}._id;
+      let api_user_id = ctx.api_user.id;
       let id = ctx.params.{{model}}_id;
 
       await {{entity}}.destroy({

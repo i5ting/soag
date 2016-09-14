@@ -4,15 +4,14 @@
  * Created by alfred on {{created_at}}.
  */
 
-var mongoose    = require('mongoose');
-var Schema      = mongoose.Schema;
-var MongooseDao = require('mongoosedao');
+const Sequelize = require('sequelize')
 
-var {{model}}Schema = new Schema(
-    {{{mongoose_attrs}}}
-);
+var connection = require('../../db')
 
-var {{entity}} = mongoose.model('{{entity}}', {{model}}Schema);
-var {{entity}}Dao = new MongooseDao({{entity}});
- 
-module.exports = {{entity}}Dao;
+var {{entity}} = connection.define('{{model}}', 
+  {{{mongoose_attrs}}}
+, {
+  freezeTableName: true // Model tableName will be the same as the model name
+});
+
+module.exports = {{entity}};
