@@ -9,7 +9,7 @@ var {{entity}} = $models.{{model}};
 exports.list = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}} => list, query: ' + JSON.stringify(ctx.query));
   
-  let {{models}} = yield {{entity}}.findAll();
+  let {{models}} = yield {{entity}}.find().$promise
   
   yield ctx.render('{{models}}/index', {
     {{models}} : {{models}}
@@ -30,11 +30,9 @@ exports.show = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}}/:id => show, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params));
   let id = ctx.params.id;
-  let {{model}} = yield {{entity}}.findOne({
-    where: {
-      id: id
-    }
-  })
+  let {{model}} = yield {{entity}}.where({
+    id: id
+  }).findOne().$promise
   
   console.log({{model}});
   
@@ -49,11 +47,9 @@ exports.edit = function *(ctx, next) {
 
   let id = ctx.params.id;
 
-  let {{model}} = yield {{entity}}.findOne({
-    where: {
-      id: id
-    }
-  })
+  let {{model}} = yield {{entity}}.where({
+    id: id
+  }).findOne().$promise
   
   console.log({{model}});
   {{model}}._action = 'edit';
@@ -67,7 +63,7 @@ exports.create = function *(ctx, next) {
   console.log(ctx.method + ' /{{models}} => create, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
 
-  let {{model}} = yield {{entity}}.create({{keypair}});
+  let {{model}} = yield {{entity}}.build({{keypair}}).insert().$promise
   
   console.log({{model}});
   yield ctx.render('{{models}}/show', {
@@ -81,13 +77,11 @@ exports.update = function *(ctx, next) {
 
   let id = ctx.params.id;
 
-  let {{model}} = yield {{entity}}.findOne({
-    where: {
-      id: id
-    }
-  })
+  let {{model}} = yield {{entity}}.where({
+    id: id
+  }).findOne().$promise
   
-  {{model}} = yield {{model}}.update({{keypair}})
+  {{model}} = yield {{model}}.updateByJson({{keypair}}).$promise
   
   yield ctx.body = ({
     data:{
@@ -105,11 +99,9 @@ exports.destroy = function *(ctx, next) {
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
   let id = ctx.params.id;
   
-  yield {{entity}}.destroy({
-      where: {
-        id: id
-      }
-  });
+  yield {{entity}}.where({
+      id: id
+    }).delete().$promise
   
   yield ctx.body= ({
     data:{},
@@ -127,7 +119,7 @@ exports.api = {
   list: function *(ctx, next) {
     let api_user_id = ctx.api_user.id;
 
-    let {{models}} = yield {{entity}}.findAll();
+    let {{models}} = yield {{entity}}.find().$promise
     
     yield ctx.api({
       {{models}} : {{models}}
@@ -137,11 +129,9 @@ exports.api = {
     let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
 
-    let {{model}} = yield {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    });
+    let {{model}} = yield {{entity}}.where({
+      id: id
+    }).findOne().$promise
     
     yield ctx.api({
       {{model}} : {{model}}
@@ -150,7 +140,7 @@ exports.api = {
   create: function *(ctx, next) {
     let api_user_id = ctx.api_user.id;
 
-    let {{model}} = yield {{entity}}.create({{keypair}});
+    let {{model}} = yield {{entity}}.build({{keypair}}).insert().$promise
     
     yield ctx.body = ({
       {{model}} : {{model}}
@@ -160,13 +150,11 @@ exports.api = {
     let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
     
-    let {{model}} = yield {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    });
+    let {{model}} = yield {{entity}}.where({
+      id: id
+    }).findOne().$promise
     
-    {{model}} = yield {{model}}.update({{keypair}})
+    {{model}} = yield {{model}}.updateByJson({{keypair}}).$promise
     
     yield ctx.api({
       {{model}} : {{model}},
@@ -177,11 +165,9 @@ exports.api = {
     let api_user_id = ctx.api_user.id;
     let id = ctx.params.{{model}}_id;
 
-    yield {{entity}}.destroy({
-      where: {
-        id: id
-      }
-    })
+    yield {{entity}}.where({
+      id: id
+    }).delete().$promise
     
     yield ctx.api({id: id});
   }
