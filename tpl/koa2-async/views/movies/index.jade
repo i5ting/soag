@@ -15,11 +15,11 @@ block content
           each n in [{{{model_dot_attrs}}}]
             td #{ eval(n) }
           td 
-            a(href='/{{models}}/#{ {{model}}._id}') Show
+            a(href='/{{models}}/#{ {{model}}.id}') Show
           td 
-            a(href='/{{models}}/#{ {{model}}._id}/edit') Edit
+            a(href='/{{models}}/#{ {{model}}.id}/edit') Edit
           td 
-            a(onclick="click_del('/{{models}}/#{ {{model}}._id}/')") Delete
+            a(onclick="click_del('/{{models}}/#{ {{model}}.id}/')") Delete
 
   br
 
