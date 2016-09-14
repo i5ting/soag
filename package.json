@@ -13,8 +13,8 @@
   },
   "preferGlobal": "true",
   "bin": {
-    "moad": "bin/moad.js",
-    "moag": "bin/moag.js"
+    "soad": "bin/moad.js",
+    "soag": "bin/moag.js"
   },
   "repository": {
     "type": "git",
