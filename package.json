@@ -1,5 +1,5 @@
 {
-  "name": "soag",
+  "name": "toag",
   "version": "1.0.4",
   "description": "soag is a sequelize scaffold generator",
   "main": "index.js",
@@ -13,8 +13,8 @@
   },
   "preferGlobal": "true",
   "bin": {
-    "soad": "bin/moad.js",
-    "soag": "bin/moag.js"
+    "toad": "bin/moad.js",
+    "toag": "bin/moag.js"
   },
   "repository": {
     "type": "git",

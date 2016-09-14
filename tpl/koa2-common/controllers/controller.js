@@ -10,7 +10,7 @@ var {{entity}} = $models.{{model}};
 exports.list = (ctx, next) => {
   console.log(ctx.method + ' /{{models}} => list, query: ' + JSON.stringify(ctx.query));
 
-  return {{entity}}.findAll().then(( {{models}})=>{
+  return {{entity}}.find().$promise.then(( {{models}})=>{
     return ctx.render('{{models}}/index', {
       {{models}} : {{models}}
     })
@@ -34,11 +34,9 @@ exports.show = (ctx, next) => {
     ', params: ' + JSON.stringify(ctx.params));
   var id = ctx.params.id;
 
-  return {{entity}}.findOne({
-    where: {
-      id: id
-    }
-  }).then( {{model}} => {
+  return {{entity}}.where({
+    id: id
+  }).findOne().$promise.then( {{model}} => {
     console.log({{model}});
     return ctx.render('{{models}}/show', {
       {{model}} : {{model}}
@@ -54,11 +52,9 @@ exports.edit = (ctx, next) => {
 
   var id = ctx.params.id;
 
-  return {{entity}}.findOne({
-    where: {
-      id: id
-    }
-  }).then( {{model}} => {
+  return {{entity}}.where({
+    id: id
+  }).findOne().$promise.then( {{model}} => {
     console.log({{model}});
     {{model}}._action = 'edit';
 
@@ -74,7 +70,7 @@ exports.create = (ctx, next) => {
   console.log(ctx.method + ' /{{models}} => create, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
 
-  return {{entity}}.create({{keypair}}).then( {{model}} => {
+  return {{entity}}.build({{keypair}}).insert().$promise.then( {{model}} => {
     console.log({{model}});
     return ctx.render('{{models}}/show', {
       {{model}} : {{model}}
@@ -90,12 +86,10 @@ exports.update = (ctx, next) => {
 
     var id = ctx.params.id;
 
-    return {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    }).then( {{model}} => {
-      return {{model}}.update({{keypair}})
+    return {{entity}}.where({
+      id: id
+    }).findOne().$promise.then( {{model}} => {
+      return {{model}}.updateByJson({{keypair}}).$promise
     }).then( {{model}} => {
       console.log({{model}});
 
@@ -115,11 +109,9 @@ exports.destroy = (ctx, next) => {
   console.log(ctx.method + ' /{{models}}/:id => destroy, query: ' + JSON.stringify(ctx.query) +
     ', params: ' + JSON.stringify(ctx.params) + ', body: ' + JSON.stringify(ctx.request.body));
   var id = ctx.params.id;
-  return {{entity}}.destroy({
-      where: {
-        id: id
-      }
-  }).then( () =>{
+  return {{entity}}.where({
+    id: id
+  }).delete().$promise.then( () =>{
     return ctx.body= ({
       data:{},
       status:{
@@ -139,7 +131,7 @@ exports.api = {
   list: (ctx, next) => {
     let api_user_id = ctx.api_user.id;
 
-    return {{entity}}.findAll().then(({{models}}) => {
+    return {{entity}}.find().$promise.then(({{models}}) => {
       return ctx.api({
         {{models}} : {{models}}
       })
@@ -151,11 +143,9 @@ exports.api = {
     let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
 
-    return {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    }).then(({{model}})=>{
+    return {{entity}}.where({
+      id: id
+    }).findOne().$promise.then(({{model}})=>{
       return ctx.api({
         {{model}} : {{model}}
       });
@@ -166,7 +156,7 @@ exports.api = {
   create: (ctx, next) => {
     let api_user_id = ctx.api_user.id;
 
-    return {{entity}}.create({{keypair}}).then({{model}}=> {
+    return {{entity}}.build({{keypair}}).insert().$promise.then({{model}}=> {
       return ctx.body = ({
         {{model}} : {{model}}
       })
@@ -178,13 +168,11 @@ exports.api = {
   update: (ctx, next) => {
     let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
-    return {{entity}}.findOne({
-      where: {
-        id: id
-      }
-    }).then({{model}}=> {
-      return {{model}}.update({{keypair}})
-    }).then({{model}}=> {
+    return {{entity}}.where({
+      id: id
+    }).findOne().$promise.then( {{model}} => {
+      return {{model}}.updateByJson({{keypair}}).$promise
+    }).then( {{model}} => {
       return ctx.api({
         {{model}} : {{model}},
         redirect : '/{{models}}/' + id
@@ -197,11 +185,9 @@ exports.api = {
     let api_user_id = ctx.api_user.id;
     var id = ctx.params.{{model}}_id;
 
-    return {{entity}}.destroy({
-      where: {
-        id: id
-      }
-    }).then(function(){
+    return {{entity}}.where({
+      id: id
+    }).delete().$promise.then(function(){
       return ctx.api({id: id})
     }).catch((err)=>{
       return ctx.api_error(err);
